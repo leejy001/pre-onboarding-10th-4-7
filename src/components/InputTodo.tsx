@@ -4,17 +4,17 @@ import { InputTodoType } from '../types/dropdown';
 import useDebounce from '../hooks/useDebounce';
 import PlusIcon from '../icon/PlusIcon';
 import SpinnerIcon from '../icon/SpinnerIcon';
-import { useTodoDispatch, useTodoState } from '../context/TodoProvider';
 
 const InputTodo = ({
+  inputText,
+  setInputText,
   inputRef,
+  isAddLoading,
   setInputFocus,
   handleInputClick,
   handleSearchFetch,
+  handleSubmit,
 }: InputTodoType) => {
-  const { handleSubmit } = useTodoDispatch();
-  const { inputText, isAddLoading } = useTodoState();
-  const { setInputText } = useTodoDispatch();
   const [isFocused, setIsFocused] = useState(false);
   const debouncedSearch = useDebounce(inputText, 500);
 
@@ -31,7 +31,7 @@ const InputTodo = ({
   }, [setInputFocus]);
 
   return (
-    <FormContainer onSubmit={handleSubmit} isFocused={isFocused}>
+    <FormContainer onSubmit={e => handleSubmit(e, inputText)} isFocused={isFocused}>
       <InputText
         placeholder="Add new todo..."
         ref={inputRef}

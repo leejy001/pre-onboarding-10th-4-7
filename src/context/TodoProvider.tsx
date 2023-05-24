@@ -9,35 +9,6 @@ const TodoDispatchContext = createContext<TodoDispatchType | null>(null);
 export function TodoProvider({ children }: React.PropsWithChildren) {
   const [inputText, setInputText] = useState('');
   const [todoListData, setTodoListData] = useState<TodoTypes[]>([]);
-  const [isAddLoading, setIsAddLoading] = useState(false);
-
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      try {
-        e.preventDefault();
-        setIsAddLoading(true);
-
-        const trimmed = inputText.trim();
-        if (!trimmed) {
-          return alert('Please write something');
-        }
-
-        const newItem = { title: trimmed };
-        const { data } = await createTodo(newItem);
-
-        if (data) {
-          return setTodoListData(prev => [...prev, data]);
-        }
-      } catch (error) {
-        console.error(error);
-        alert('Something went wrong.');
-      } finally {
-        setInputText('');
-        setIsAddLoading(false);
-      }
-    },
-    [inputText, setInputText]
-  );
 
   useEffect(() => {
     (async () => {
@@ -51,14 +22,12 @@ export function TodoProvider({ children }: React.PropsWithChildren) {
       value={{
         inputText,
         todoListData,
-        isAddLoading,
       }}
     >
       <TodoDispatchContext.Provider
         value={{
           setInputText,
           setTodoListData,
-          handleSubmit,
         }}
       >
         {children}
