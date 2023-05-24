@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { InputTodoType } from '../types/dropdown';
 import useDebounce from '../hooks/useDebounce';
 import PlusIcon from '../icon/PlusIcon';
 import SpinnerIcon from '../icon/SpinnerIcon';
-import { useTodoDispatch, useTodoState } from '../context/TodoProvider';
-import { useSearchDispatch } from '../context/SearchProvider';
 
-interface InputTodoType {
-  inputRef: React.RefObject<HTMLInputElement>;
-  setInputFocus: () => void;
-  handleInputClick: () => void;
-}
-
-const InputTodo = ({ inputRef, setInputFocus, handleInputClick }: InputTodoType) => {
-  const { handleSubmit } = useTodoDispatch();
-  const { handleSearchFetch } = useSearchDispatch();
-  const { inputText, setInputText, isAddLoading } = useTodoState();
+const InputTodo = ({
+  inputText,
+  setInputText,
+  inputRef,
+  isAddLoading,
+  setInputFocus,
+  handleInputClick,
+  handleSearchFetch,
+  handleSubmit,
+}: InputTodoType) => {
   const [isFocused, setIsFocused] = useState(false);
   const debouncedSearch = useDebounce(inputText, 500);
 
@@ -32,7 +31,7 @@ const InputTodo = ({ inputRef, setInputFocus, handleInputClick }: InputTodoType)
   }, [setInputFocus]);
 
   return (
-    <FormContainer onSubmit={handleSubmit} isFocused={isFocused}>
+    <FormContainer onSubmit={e => handleSubmit(e, inputText)} isFocused={isFocused}>
       <InputText
         placeholder="Add new todo..."
         ref={inputRef}
