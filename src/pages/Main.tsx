@@ -1,20 +1,20 @@
 import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import useFocus from '../hooks/useFocus';
+import useSearchdata from '../hooks/useSearchData';
 import Header from '../components/Header';
 import InputTodo from '../components/InputTodo';
 import TodoList from '../components/TodoList';
 import DropDown from '../components/DropDown';
 import { useTodoDispatch, useTodoState } from '../context/TodoProvider';
-import { useSearchState } from '../context/SearchProvider';
 
 const Main = () => {
   const { inputText } = useTodoState();
-  const { searchListData } = useSearchState();
   const { handleAddTodo } = useTodoDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { ref: inputRef, setFocus: setInputFocus } = useFocus();
   const dropdownRef = useRef<HTMLUListElement>(null);
+  const { isTotal, isSearchLoading, searchListData, handleSearchFetch } = useSearchdata();
 
   const handleInputClick = () => {
     setIsDropdownOpen(true);
@@ -45,13 +45,17 @@ const Main = () => {
           inputRef={inputRef}
           setInputFocus={setInputFocus}
           handleInputClick={handleInputClick}
+          handleSearchFetch={handleSearchFetch}
         />
         {isDropdownOpen && inputText && searchListData.length > 0 && (
           <DropDown
             dropdownRef={dropdownRef}
             searchListData={searchListData}
             inputText={inputText}
+            isTotal={isTotal}
+            isSearchLoading={isSearchLoading}
             handleAddTodoClick={handleAddTodo}
+            handleSearchFetch={handleSearchFetch}
           />
         )}
         <TodoList />

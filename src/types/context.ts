@@ -15,13 +15,3 @@ export interface TodoDispatchType {
   handleAddTodo: (todo: string) => Promise<void>;
   handleSubmit: (event: React.FormEvent) => Promise<void>;
 }
-
-export interface SearchContextType {
-  isTotal: boolean;
-  isSearchLoading: boolean;
-  searchListData: string[];
-}
-
-export interface SearchDispatchType {
-  handleSearchFetch: (type: string, inputText: string) => Promise<void>;
-}
