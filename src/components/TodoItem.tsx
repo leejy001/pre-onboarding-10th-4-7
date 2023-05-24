@@ -17,7 +17,7 @@ const TodoItem = ({ id, title }: TodoItemTypes) => {
 
   return (
     <Item>
-      <span>{title}</span>
+      <ItemTitle>{title}</ItemTitle>
       <ItemOption>
         {!isLoading ? (
           <button onClick={() => handleRemoveTodo(id, setIsLoading)}>
@@ -37,6 +37,7 @@ const Item = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   list-style-type: none;
   padding: 17px 1.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.color.COLOR_GRAY_2};
@@ -46,6 +47,12 @@ const Item = styled.li`
     opacity: 0.85;
     background-color: ${({ theme }) => theme.color.COLOR_GRAY_2};
   }
+`;
+
+const ItemTitle = styled.p`
+  word-break: break-all;
+  white-space: break-word;
+  text-overflow: ellipsis;
 `;
 
 const ItemOption = styled.div`
