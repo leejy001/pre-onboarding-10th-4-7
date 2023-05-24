@@ -4,6 +4,8 @@ import { DropdownType, HighlightType } from '../types/dropdown';
 import { ReactComponent as Union } from '../assets/union_icon.svg';
 import { ReactComponent as Spinner } from '../assets/spinner_icon.svg';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
+import { createTodo } from '../api/todo';
+import { useTodoDispatch } from '../context/TodoProvider';
 
 function HighlightedText({ text, highlight }: HighlightType) {
   const parts = text.split(highlight);
@@ -26,9 +28,19 @@ function DropDown({
   inputText,
   isTotal,
   isSearchLoading,
-  handleAddTodoClick,
   handleSearchFetch,
 }: DropdownType) {
+  const { setInputText, setTodoListData } = useTodoDispatch();
+
+  const handleAddTodo = async (todo: string) => {
+    const { data } = await createTodo({ title: todo });
+    if (data) {
+      setTodoListData(prev => [...prev, data]);
+      setInputText('');
+      return;
+    }
+  };
+
   const onIntersect: IntersectionObserverCallback = ([{ isIntersecting }]) => {
     if (isIntersecting && !isTotal && !isSearchLoading) {
       handleSearchFetch('scroll', inputText);
@@ -39,7 +51,7 @@ function DropDown({
   return (
     <DropdownBox ref={dropdownRef}>
       {searchListData.map((item, idx) => (
-        <DropdownItem key={idx} onClick={() => handleAddTodoClick(item)}>
+        <DropdownItem key={idx} onClick={() => handleAddTodo(item)}>
           <HighlightedText text={item} highlight={inputText} />
         </DropdownItem>
       ))}

@@ -13,7 +13,8 @@ const InputTodo = ({
   handleSearchFetch,
 }: InputTodoType) => {
   const { handleSubmit } = useTodoDispatch();
-  const { inputText, setInputText, isAddLoading } = useTodoState();
+  const { inputText, isAddLoading } = useTodoState();
+  const { setInputText } = useTodoDispatch();
   const [isFocused, setIsFocused] = useState(false);
   const debouncedSearch = useDebounce(inputText, 500);
 

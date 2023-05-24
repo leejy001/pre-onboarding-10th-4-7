@@ -4,7 +4,6 @@ export interface DropdownType {
   inputText: string;
   isTotal: boolean;
   isSearchLoading: boolean;
-  handleAddTodoClick: (todo: string) => void;
   handleSearchFetch: (type: string, inputText: string) => Promise<void>;
 }
 

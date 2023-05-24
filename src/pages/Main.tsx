@@ -6,11 +6,10 @@ import Header from '../components/Header';
 import InputTodo from '../components/InputTodo';
 import TodoList from '../components/TodoList';
 import DropDown from '../components/DropDown';
-import { useTodoDispatch, useTodoState } from '../context/TodoProvider';
+import { useTodoState } from '../context/TodoProvider';
 
 const Main = () => {
   const { inputText } = useTodoState();
-  const { handleAddTodo } = useTodoDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { ref: inputRef, setFocus: setInputFocus } = useFocus();
   const dropdownRef = useRef<HTMLUListElement>(null);
@@ -54,7 +53,6 @@ const Main = () => {
             inputText={inputText}
             isTotal={isTotal}
             isSearchLoading={isSearchLoading}
-            handleAddTodoClick={handleAddTodo}
             handleSearchFetch={handleSearchFetch}
           />
         )}

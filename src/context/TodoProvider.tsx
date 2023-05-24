@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { createTodo, deleteTodo, getTodoList } from '../api/todo';
+import { createTodo, getTodoList } from '../api/todo';
 import { TodoTypes } from '../types/todo';
 import { TodoContextType, TodoDispatchType } from '../types/context';
 
@@ -10,32 +10,6 @@ export function TodoProvider({ children }: React.PropsWithChildren) {
   const [inputText, setInputText] = useState('');
   const [todoListData, setTodoListData] = useState<TodoTypes[]>([]);
   const [isAddLoading, setIsAddLoading] = useState(false);
-
-  const handleRemoveTodo = useCallback(
-    async (id: string, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
-      try {
-        setIsLoading(true);
-        await deleteTodo(id);
-
-        setTodoListData(prev => prev.filter((item: TodoTypes) => item.id !== id));
-      } catch (error) {
-        console.error(error);
-        alert('Something went wrong.');
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
-
-  const handleAddTodo = async (todo: string) => {
-    const { data } = await createTodo({ title: todo });
-    if (data) {
-      setTodoListData(prev => [...prev, data]);
-      setInputText('');
-      return;
-    }
-  };
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -76,15 +50,14 @@ export function TodoProvider({ children }: React.PropsWithChildren) {
     <TodoContext.Provider
       value={{
         inputText,
-        setInputText,
         todoListData,
         isAddLoading,
       }}
     >
       <TodoDispatchContext.Provider
         value={{
-          handleAddTodo,
-          handleRemoveTodo,
+          setInputText,
+          setTodoListData,
           handleSubmit,
         }}
       >

@@ -1,13 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { TodoItemTypes } from '../types/todo';
+import { TodoItemTypes, TodoTypes } from '../types/todo';
 import TrashIcon from '../icon/TrashIcon';
 import SpinnerIcon from '../icon/SpinnerIcon';
+import { deleteTodo } from '../api/todo';
 import { useTodoDispatch } from '../context/TodoProvider';
 
 const TodoItem = ({ id, title }: TodoItemTypes) => {
+  const { setTodoListData } = useTodoDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const { handleRemoveTodo } = useTodoDispatch();
+
+  const handleRemoveTodo = useCallback(
+    async (id: string) => {
+      try {
+        setIsLoading(true);
+        await deleteTodo(id);
+
+        setTodoListData(prev => prev.filter((item: TodoTypes) => item.id !== id));
+      } catch (error) {
+        console.error(error);
+        alert('Something went wrong.');
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [setTodoListData]
+  );
 
   useEffect(() => {
     return () => {
@@ -20,7 +38,7 @@ const TodoItem = ({ id, title }: TodoItemTypes) => {
       <ItemTitle>{title}</ItemTitle>
       <ItemOption>
         {!isLoading ? (
-          <button onClick={() => handleRemoveTodo(id, setIsLoading)}>
+          <button onClick={() => handleRemoveTodo(id)}>
             <TrashIcon />
           </button>
         ) : (

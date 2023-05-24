@@ -2,16 +2,12 @@ import { TodoTypes } from './todo';
 
 export interface TodoContextType {
   inputText: string;
-  setInputText: React.Dispatch<React.SetStateAction<string>>;
   todoListData: TodoTypes[];
   isAddLoading: boolean;
 }
 
 export interface TodoDispatchType {
-  handleRemoveTodo: (
-    id: string,
-    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
-  ) => Promise<void>;
-  handleAddTodo: (todo: string) => Promise<void>;
+  setInputText: React.Dispatch<React.SetStateAction<string>>;
+  setTodoListData: React.Dispatch<React.SetStateAction<TodoTypes[]>>;
   handleSubmit: (event: React.FormEvent) => Promise<void>;
 }
